@@ -37,7 +37,7 @@ const CommentVotes: FC<CommentVotesProps> = ({ commentId, initialVoteAmt, initia
         voteType,
       };
 
-      await axios.patch('/api/subreddit/comment/vote', payload);
+      await axios.patch('/api/subreddit/post/comment/vote', payload);
     },
     onError: (error, voteType) => {
       if (voteType === 'UP') {
@@ -93,7 +93,7 @@ const CommentVotes: FC<CommentVotesProps> = ({ commentId, initialVoteAmt, initia
       <Button size='sm' variant='ghost' aria-label='Down vote' onClick={() => vote(VoteType.DOWN)}>
         <ArrowBigDown
           className={cn('w-5 h-5 text-zinc-700', {
-            'text-red-500 fill-red-500': currentVote?.type === 'UP',
+            'text-red-500 fill-red-500': currentVote?.type === 'DOWN',
           })}
         />
       </Button>

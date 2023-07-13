@@ -14,6 +14,7 @@ import { Textarea } from './ui/textarea';
 import { useMutation } from '@tanstack/react-query';
 import { CommentRequest } from '@/lib/validator/comment';
 import axios from 'axios';
+import { toast } from '@/hooks/use-toast';
 
 type ExtendedComment = Comment & {
   votes: CommentVote[];
@@ -44,6 +45,17 @@ const PostComment: FC<PostCommentProps> = ({ comment, votesAmt, currentVote, pos
 
       const { data } = await axios.patch(`/api/subreddit/post/comment`, payload);
       return data;
+    },
+    onError: () => {
+      return toast({
+        title: 'Something went wrong',
+        description: 'Comment was not posted successfully, please try again.',
+        variant: 'destructive',
+      });
+    },
+    onSuccess: () => {
+      router.refresh();
+      setIsReplying(false);
     },
   });
 
@@ -96,8 +108,7 @@ const PostComment: FC<PostCommentProps> = ({ comment, votesAmt, currentVote, pos
                 placeholder='What are your through?'
               />
               <div className='mt-2 flex justify-end'>
-                <Button tabIndex={-1} variant='subtle'
-                  onClick={() => setIsReplying(false)}>
+                <Button tabIndex={-1} variant='subtle' onClick={() => setIsReplying(false)}>
                   Cancel
                 </Button>
                 <Button
